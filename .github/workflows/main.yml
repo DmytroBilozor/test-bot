@@ -16,7 +16,10 @@ jobs:
       - name: Find new files
         id: find_files
         run: |
-          changed_files=$(git diff --name-only HEAD^ HEAD | grep '^content/bot/')
+          git fetch origin main
+          base=$(git rev-parse FETCH_HEAD^1)
+          head=$(git rev-parse FETCH_HEAD)
+          changed_files=$(git diff --name-only $base $head | grep '^content/bot/')
           if [ -n "$changed_files" ]; then
           for file in $changed_files; do
           echo "Content of $file:"
