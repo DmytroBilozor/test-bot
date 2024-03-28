@@ -16,6 +16,8 @@ jobs:
       - name: Find new files
         id: find_files
         run: |
+          git status
+          ls
           changed_files=$(git diff --name-only main | grep '^content/bot/')
           echo "::set-output name=files::$changed_files"
 
