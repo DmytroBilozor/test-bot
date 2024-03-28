@@ -16,7 +16,7 @@ jobs:
       - name: Find new files
         id: find_files
         run: |
-          changed_files=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})
+          changed_files=$(git diff --name-only HEAD^ HEAD | grep '^content/bot/')
           if [ -n "$changed_files" ]; then
           for file in $changed_files; do
           echo "Content of $file:"
