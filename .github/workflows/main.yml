@@ -18,6 +18,10 @@ jobs:
         run: |
           curl https://15d3-77-120-226-129.ngrok-free.app/health-check
 
+      - name: Test POST Request
+        run: |
+          curl -X POST https://15d3-77-120-226-129.ngrok-free.app/test
+
       - name: Find Modified Files
         id: files
         uses: lots0logs/gh-action-get-changed-files@2.1.4
@@ -32,7 +36,9 @@ jobs:
       - name: Curl POST Changed Files
         run: |
           for file in ${{ steps.files.outputs.all }}; do
+            echo "in for"
             if [[ $file == content/bot/* ]]; then
+              echo "in if"
               curl -X POST -F "file=@${{ github.workspace }}/$file" https://15d3-77-120-226-129.ngrok-free.app/create-bot
             fi
           done
