@@ -17,7 +17,7 @@ jobs:
         id: find_files
         run: |
           git fetch origin main
-          base=$(git rev-parse FETCH_HEAD^1)
+          base=$(git log --pretty=format:"%H" -n 2 | tail -n 1)
           head=$(git rev-parse FETCH_HEAD)
           changed_files=$(git diff --name-only $base $head | grep '^content/bot/')
           if [ -n "$changed_files" ]; then
