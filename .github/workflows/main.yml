@@ -16,7 +16,8 @@ jobs:
       - name: Find new files
         id: find_files
         run: |
-          changed_files=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})          
+          changed_files=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})    
+          echo changed_files
           echo "::set-output name=files::$changed_files"
 
       - name: Send files
