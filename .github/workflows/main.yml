@@ -1,0 +1,27 @@
+name: Send new files
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  send_new_files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Find new files
+        id: find_files
+        run: |
+          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^content/bot/')
+          echo "::set-output name=files::$changed_files"
+
+      - name: Send files
+        if: steps.find_files.outputs.files != ''
+        run: |
+          for file in ${{ steps.find_files.outputs.files }}; do
+            curl -X POST -H "Content-Type: text/markdown" --data-binary "@$file" https://15d3-77-120-226-129.ngrok-free.app
+          done
