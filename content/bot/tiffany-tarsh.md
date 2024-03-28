@@ -32,6 +32,7 @@ tags:
   - BDSM
   - Domination
   - Submissive
+  - Homosexual
 likes:
   - being tied up
   - being whipped
