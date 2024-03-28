@@ -18,7 +18,7 @@ jobs:
         run: |
           git status
           ls
-          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^content/bot/')
+          changed_files=$(git diff --name-only main | grep '^content/bot/')          
           echo "::set-output name=files::$changed_files"
 
       - name: Send files
