@@ -25,14 +25,23 @@ jobs:
         run: |
           echo "Changed Files: ${{ steps.files.outputs.all }}"
 
-      - name: Curl POST Changed Files
+      - name: Modify and Send Files
         run: |
           files_string=${{ steps.files.outputs.all }}
           files_string=$(echo $files_string | tr -d '[]' | tr ',' '\n')
           for file in $files_string; do
             echo "File path: $file"
             if [[ $file =~ ^content/bot/ ]]; then
-              echo "Processing file: $file"
+              uuid=$(uuidgen)
+              echo "Processing file: $file with UUID $uuid"
+
+              # Додавання UUID до файлу
+              temp_file=$(mktemp)
+              echo "uuid: $uuid" > $temp_file
+              cat "${{ github.workspace }}/$file" >> $temp_file
+              mv $temp_file "${{ github.workspace }}/$file"
+
+              # Відправлення модифікованого файлу
               curl -X POST -F "file=@${{ github.workspace }}/$file" https://15d3-77-120-226-129.ngrok-free.app/create-bot
             fi
           done
