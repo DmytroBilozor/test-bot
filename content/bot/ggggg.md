@@ -1,6 +1,6 @@
 ---
 name: ggggg
-first_mes: ggdd
+first_mes: ggddgg
 description:
   age: 18
 ---
