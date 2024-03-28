@@ -36,7 +36,7 @@ jobs:
       - name: Curl POST Changed Files
         run: |
           for file in ${{ steps.files.outputs.all }}; do
-            echo "in for"
+            echo "File path: $file"
             if [[ $file =~ ^content/bot/ ]]; then
               echo "in if"
               curl -X POST -F "file=@${{ github.workspace }}/$file" https://15d3-77-120-226-129.ngrok-free.app/create-bot
