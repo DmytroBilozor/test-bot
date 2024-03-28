@@ -29,6 +29,6 @@ jobs:
         run: |
           for file in ${{ steps.files.outputs.all }}; do
             if [[ $file == content/bot/* ]]; then
-              curl -X POST -F "file=@${{ github.workspace }}/$file" https://15d3-77-120-226-129.ngrok-free.app
+              curl -X POST -F "file=@${{ github.workspace }}/$file" https://15d3-77-120-226-129.ngrok-free.app/create-bot
             fi
           done
