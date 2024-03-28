@@ -4,34 +4,31 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'content/bot/**'
 
 jobs:
-  send_new_files:
+  send_file:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Find new files
-        id: find_files
-        run: |
-          git fetch origin main
-          base=$(git log --pretty=format:"%H" -n 2 | tail -n 1)
-          head=$(git rev-parse FETCH_HEAD)
-          changed_files=$(git diff --name-only $base $head | grep '^content/bot/')
-          if [ -n "$changed_files" ]; then
-          for file in $changed_files; do
-          echo "Content of $file:"
-          cat "$file"
-          done
-          else
-          echo "No changed files found in 'content/bot/'."
-          fi
+      - name: Find Modified Files
+        id: files
+        uses: lots0logs/gh-action-get-changed-files@2.1.4
+        with:
+          format: 'space-delimited'
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Send files
-        if: steps.find_files.outputs.files != ''
+      - name: Print Changed Files
         run: |
-          for file in ${{ steps.find_files.outputs.files }}; do
-            curl -X POST -H "Content-Type: text/markdown" --data-binary "@$file" https://15d3-77-120-226-129.ngrok-free.app/create-bot
+          echo "Changed Files: ${{ steps.files.outputs.all }}"
+
+      - name: Curl POST Changed Files
+        run: |
+          for file in ${{ steps.files.outputs.all }}; do
+            if [[ $file == content/bot/* ]]; then
+              curl -X POST -F "file=@${{ github.workspace }}/$file" https://15d3-77-120-226-129.ngrok-free.app
+            fi
           done
